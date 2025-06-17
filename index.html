@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EventHub - Competition Registration</title>
+    <meta name="description" content="Register for exciting competitions including Speech, Singing, and Dance events. Join EventHub and showcase your talent today!">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-5px);
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes slideUp {
+            from { transform: translateY(30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        @keyframes wave {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(20deg); }
+            75% { transform: rotate(-10deg); }
+        }
+        
+        .animate-fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        
+        .animate-slide-up {
+            animation: slideUp 0.6s ease-out;
+        }
+        
+        .wave {
+            display: inline-block;
+            animation: wave 3s ease-in-out infinite;
+        }
+        
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Login Page -->
+    <div id="loginPage" class="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 gradient-bg">
+        <div class="max-w-md w-full space-y-8 animate-fade-in">
+            <div class="bg-white rounded-2xl shadow-2xl p-8">
+                <div class="text-center">
+                    <div class="mx-auto h-16 w-16 bg-blue-100 rounded-full flex items-center justify-center mb-4">
+                        <i class="fas fa-calendar-alt text-blue-600 text-2xl"></i>
+                    </div>
+                    <h2 class="text-3xl font-bold text-gray-900 mb-2">EventHub</h2>
+                    <p class="text-gray-600 mb-8">Sign in to register for competitions</p>
+                </div>
+                
+                <div id="errorMessage" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4 hidden"></div>
+                
+                <form class="space-y-6" onsubmit="handleLogin(event)">
+                    <div>
+                        <label for="username" class="block text-sm font-medium text-gray-700 mb-2">
+                            Email or Username
+                        </label>
+                        <div class="relative">
+                            <input
+                                id="username"
+                                name="username"
+                                type="text"
+                                required
+                                class="w-full px-4 py-3 pl-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                                placeholder="Enter your email"
+                            />
+                            <i class="fas fa-user absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label for="password" class="block text-sm font-medium text-gray-700 mb-2">
+                            Password
+                        </label>
+                        <div class="relative">
+                            <input
+                                id="password"
+                                name="password"
+                                type="password"
+                                required
+                                class="w-full px-4 py-3 pl-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                                placeholder="Enter your password"
+                            />
+                            <i class="fas fa-lock absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                        </div>
+                    </div>
+                    
+                    <button
+                        type="submit"
+                        id="loginBtn"
+                        class="w-full bg-blue-600 text-white py-3 px-4 rounded-lg hover:bg-blue-700 focus:ring-4 focus:ring-blue-200 transition-all duration-200 font-medium"
+                    >
+                        Sign In
+                    </button>
+                </form>
+                
+                <div class="mt-6 text-center">
+                    <p class="text-sm text-gray-600">
+                        Don't have an account?
+                        <a href="#" class="text-blue-600 hover:text-blue-500 font-medium">
+                            Register here
+                        </a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Welcome Page -->
+    <div id="welcomePage" class="min-h-screen bg-slate-50 hidden">
+        <!-- Navigation -->
+        <nav class="bg-white shadow-sm border-b border-gray-200">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between items-center h-16">
+                    <div class="flex items-center">
+                        <div class="h-8 w-8 bg-blue-600 rounded-lg flex items-center justify-center mr-3">
+                            <i class="fas fa-calendar-alt text-white text-sm"></i>
+                        </div>
+                        <span class="text-xl font-bold text-gray-900">EventHub</span>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <span class="text-gray-700">
+                            Welcome, <span class="font-medium" id="userName">User</span>
+                        </span>
+                        <button onclick="logout()" class="text-gray-500 hover:text-gray-700 transition-colors">
+                            <i class="fas fa-sign-out-alt"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div class="text-center mb-12 animate-slide-up">
+                <h1 class="text-4xl font-bold text-gray-900 mb-4">
+                    Welcome Back! <span class="wave">👋</span>
+                </h1>
+                <p class="text-xl text-gray-600 max-w-2xl mx-auto">
+                    Choose a competition to register and showcase your talent
+                </p>
+            </div>
+
+            <!-- Competition Cards -->
+            <div class="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+                <!-- Speech Competition -->
+                <div class="bg-white rounded-2xl shadow-lg hover:shadow-xl card-hover cursor-pointer overflow-hidden"
+                     onclick="showEvent('speech')">
+                    <div class="p-8 text-center">
+                        <div class="mx-auto h-20 w-20 bg-blue-100 rounded-full flex items-center justify-center mb-6">
+                            <i class="fas fa-microphone text-blue-600 text-3xl"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-gray-900 mb-3">Speech Competition</h3>
+                        <p class="text-gray-600 mb-6">Express your thoughts and inspire others with powerful speeches</p>
+                        <div class="flex items-center justify-center text-blue-600 font-medium">
+                            <span>Register Now</span>
+                            <i class="fas fa-arrow-right ml-2"></i>
+                        </div>
+                    </div>
+                    <div class="h-2 bg-gradient-to-r from-blue-400 to-blue-600"></div>
+                </div>
+
+                <!-- Singing Competition -->
+                <div class="bg-white rounded-2xl shadow-lg hover:shadow-xl card-hover cursor-pointer overflow-hidden"
+                     onclick="showEvent('singing')">
+                    <div class="p-8 text-center">
+                        <div class="mx-auto h-20 w-20 bg-purple-100 rounded-full flex items-center justify-center mb-6">
+                            <i class="fas fa-music text-purple-600 text-3xl"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-gray-900 mb-3">Singing Competition</h3>
+                        <p class="text-gray-600 mb-6">Share your melodious voice and captivate the audience</p>
+                        <div class="flex items-center justify-center text-purple-600 font-medium">
+                            <span>Register Now</span>
+                            <i class="fas fa-arrow-right ml-2"></i>
+                        </div>
+                    </div>
+                    <div class="h-2 bg-gradient-to-r from-purple-400 to-purple-600"></div>
+                </div>
+
+                <!-- Dance Competition -->
+                <div class="bg-white rounded-2xl shadow-lg hover:shadow-xl card-hover cursor-pointer overflow-hidden"
+                     onclick="showEvent('dance')">
+                    <div class="p-8 text-center">
+                        <div class="mx-auto h-20 w-20 bg-amber-100 rounded-full flex items-center justify-center mb-6">
+                            <i class="fas fa-female text-amber-600 text-3xl"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-gray-900 mb-3">Dance Competition</h3>
+                        <p class="text-gray-600 mb-6">Move to the rhythm and express yourself through dance</p>
+                        <div class="flex items-center justify-center text-amber-600 font-medium">
+                            <span>Register Now</span>
+                            <i class="fas fa-arrow-right ml-2"></i>
+                        </div>
+                    </div>
+                    <div class="h-2 bg-gradient-to-r from-amber-400 to-amber-600"></div>
+                </div>
+            </div>
+
+            <!-- Stats Section -->
+            <div class="mt-16 bg-white rounded-2xl shadow-lg p-8">
+                <div class="grid md:grid-cols-3 gap-8 text-center">
+                    <div>
+                        <div class="text-3xl font-bold text-blue-600 mb-2">500+</div>
+                        <div class="text-gray-600">Participants</div>
+                    </div>
+                    <div>
+                        <div class="text-3xl font-bold text-purple-600 mb-2">3</div>
+                        <div class="text-gray-600">Competitions</div>
+                    </div>
+                    <div>
+                        <div class="text-3xl font-bold text-amber-600 mb-2">₹50K</div>
+                        <div class="text-gray-600">Prize Money</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Event Pages -->
+    <div id="eventPage" class="min-h-screen bg-slate-50 hidden">
+        <!-- Navigation -->
+        <nav class="bg-white shadow-sm border-b border-gray-200">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between items-center h-16">
+                    <div class="flex items-center">
+                        <button onclick="showWelcome()" class="mr-4 text-gray-600 hover:text-gray-900 transition-colors">
+                            <i class="fas fa-arrow-left"></i>
+                        </button>
+                        <div class="h-8 w-8 bg-blue-600 rounded-lg flex items-center justify-center mr-3">
+                            <i class="fas fa-calendar-alt text-white text-sm"></i>
+                        </div>
+                        <span class="text-xl font-bold text-gray-900">EventHub</span>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <span class="text-gray-700">
+                            Welcome, <span class="font-medium" id="userNameEvent">User</span>
+                        </span>
+                        <button onclick="logout()" class="text-gray-500 hover:text-gray-700 transition-colors">
+                            <i class="fas fa-sign-out-alt"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <!-- Breadcrumb -->
+            <nav class="mb-8">
+                <ol class="flex items-center space-x-2 text-sm text-gray-500">
+                    <li>
+                        <button onclick="showWelcome()" class="hover:text-gray-700 transition-colors">
+                            Home
+                        </button>
+                    </li>
+                    <li><i class="fas fa-chevron-right text-xs"></i></li>
+                    <li class="text-gray-900 font-medium" id="eventBreadcrumb">Event</li>
+                </ol>
+            </nav>
+
+            <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
+                <!-- Event Header -->
+                <div id="eventHeader" class="bg-gradient-to-r from-blue-500 to-purple-600 p-8 text-white text-center">
+                    <div class="mx-auto h-24 w-24 bg-white bg-opacity-20 rounded-full flex items-center justify-center mb-6">
+                        <i id="eventIcon" class="fas fa-microphone text-4xl"></i>
+                    </div>
+                    <h1 id="eventTitle" class="text-4xl font-bold mb-4">Speech Competition 🎤</h1>
+                    <p id="eventDescription" class="text-xl opacity-90">Express your thoughts and inspire others with powerful speeches</p>
+                </div>
+
+                <!-- Event Content -->
+                <div class="p-8">
+                    <div class="grid md:grid-cols-2 gap-8 mb-8">
+                        <div>
+                            <h3 class="text-xl font-bold text-gray-900 mb-4">Competition Details</h3>
+                            <div class="space-y-3 text-gray-600">
+                                <div class="flex items-center">
+                                    <i class="fas fa-calendar text-blue-600 w-5"></i>
+                                    <span class="ml-3">Date: December 15, 2024</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <i class="fas fa-clock text-blue-600 w-5"></i>
+                                    <span class="ml-3">Time: 10:00 AM - 4:00 PM</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <i class="fas fa-map-marker-alt text-blue-600 w-5"></i>
+                                    <span class="ml-3" id="eventVenue">Venue: Main Auditorium</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <i class="fas fa-trophy text-blue-600 w-5"></i>
+                                    <span class="ml-3">Prize: ₹15,000 Winner</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold text-gray-900 mb-4">Requirements</h3>
+                            <ul id="eventRequirements" class="space-y-2 text-gray-600">
+                                <!-- Requirements will be populated by JavaScript -->
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="border-t border-gray-200 pt-8">
+                        <div class="text-center">
+                            <h3 class="text-2xl font-bold text-gray-900 mb-4">Ready to Participate?</h3>
+                            <p class="text-gray-600 mb-6">Click below to fill out the registration form</p>
+                            <button
+                                onclick="openRegistrationForm()"
+                                class="bg-blue-600 text-white px-8 py-4 rounded-lg text-lg font-medium hover:bg-blue-700 focus:ring-4 focus:ring-blue-200 transition-all duration-200 inline-flex items-center"
+                            >
+                                <i class="fas fa-external-link-alt mr-3"></i>
+                                Register Now
+                            </button>
+                            <p class="text-sm text-gray-500 mt-4">
+                                <i class="fas fa-info-circle mr-2"></i>
+                                Registration form will open in a new tab
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Thank You Page -->
+    <div id="thankYouPage" class="min-h-screen bg-slate-50 flex items-center justify-center hidden">
+        <div class="max-w-md w-full mx-4">
+            <div class="bg-white rounded-2xl shadow-lg animate-fade-in p-8 text-center">
+                <div class="mx-auto h-20 w-20 bg-green-100 rounded-full flex items-center justify-center mb-6">
+                    <i class="fas fa-check text-green-600 text-3xl"></i>
+                </div>
+                <h2 class="text-3xl font-bold text-gray-900 mb-4">Thank You!</h2>
+                <p class="text-gray-600 mb-6">
+                    Your registration has been submitted successfully. We'll contact you soon with further details.
+                </p>
+                <button
+                    onclick="showWelcome()"
+                    class="bg-blue-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-blue-700 transition-all duration-200"
+                >
+                    Back to Home
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Event data with Google Form URLs (Replace these with your actual Google Form URLs)
+        const events = {
+            speech: {
+                title: 'Speech Competition 🎤',
+                description: 'Express your thoughts and inspire others with powerful speeches',
+                icon: 'fa-microphone',
+                gradient: 'from-blue-500 to-purple-600',
+                venue: 'Main Auditorium',
+                requirements: [
+                    '5-8 minutes speech duration',
+                    'Original content only',
+                    'College ID required'
+                ],
+                formUrl: 'https://docs.google.com/forms/d/e/1FAIpQLSdwAO0XOJLQJm8cG5vP5wFc8z1RuZjKqY7vQQg4QQqYZqYQQg/viewform'
+            },
+            singing: {
+                title: 'Singing Competition 🎵',
+                description: 'Share your melodious voice and captivate the audience',
+                icon: 'fa-music',
+                gradient: 'from-purple-500 to-pink-600',
+                venue: 'Music Hall',
+                requirements: [
+                    '3-5 minutes performance',
+                    'Any genre welcome',
+                    'Background track allowed'
+                ],
+                formUrl: 'https://docs.google.com/forms/d/e/1FAIpQLSe-REPLACE_WITH_SINGING_FORM_ID/viewform'
+            },
+            dance: {
+                title: 'Dance Competition 💃',
+                description: 'Move to the rhythm and express yourself through dance',
+                icon: 'fa-female',
+                gradient: 'from-amber-500 to-red-600',
+                venue: 'Dance Studio',
+                requirements: [
+                    '3-6 minutes performance',
+                    'Any dance style',
+                    'Props allowed'
+                ],
+                formUrl: 'https://docs.google.com/forms/d/e/1FAIpQLSe-REPLACE_WITH_DANCE_FORM_ID/viewform'
+            }
+        };
+
+        let currentEvent = '';
+        let currentUser = '';
+
+        function showPage(pageId) {
+            document.querySelectorAll('[id$="Page"]').forEach(page => {
+                page.classList.add('hidden');
+            });
+            document.getElementById(pageId).classList.remove('hidden');
+        }
+
+        function handleLogin(event) {
+            event.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            if (username && password) {
+                currentUser = username;
+                document.getElementById('userName').textContent = username;
+                document.getElementById('userNameEvent').textContent = username;
+                showPage('welcomePage');
+            } else {
+                const errorMsg = document.getElementById('errorMessage');
+                errorMsg.textContent = 'Please enter both username and password';
+                errorMsg.classList.remove('hidden');
+            }
+        }
+
+        function showWelcome() {
+            showPage('welcomePage');
+        }
+
+        function showEvent(eventType) {
+            currentEvent = eventType;
+            const event = events[eventType];
+            
+            // Update event page content
+            document.getElementById('eventTitle').textContent = event.title;
+            document.getElementById('eventDescription').textContent = event.description;
+            document.getElementById('eventIcon').className = `fas ${event.icon} text-4xl`;
+            document.getElementById('eventVenue').textContent = `Venue: ${event.venue}`;
+            document.getElementById('eventBreadcrumb').textContent = event.title.split(' ')[0];
+            
+            // Update header gradient
+            const header = document.getElementById('eventHeader');
+            header.className = `bg-gradient-to-r ${event.gradient} p-8 text-white text-center`;
+            
+            // Update requirements
+            const requirementsList = document.getElementById('eventRequirements');
+            requirementsList.innerHTML = '';
+            event.requirements.forEach(req => {
+                const li = document.createElement('li');
+                li.className = 'flex items-start';
+                li.innerHTML = `
+                    <i class="fas fa-check text-green-600 mt-1 mr-3"></i>
+                    <span>${req}</span>
+                `;
+                requirementsList.appendChild(li);
+            });
+            
+            showPage('eventPage');
+        }
+
+        function openRegistrationForm() {
+            const event = events[currentEvent];
+            if (event && event.formUrl) {
+                // Open Google Form in new tab
+                window.open(event.formUrl, '_blank');
+                
+                // Show thank you page after short delay
+                setTimeout(() => {
+                    showPage('thankYouPage');
+                }, 2000);
+            } else {
+                alert('Registration form not configured. Please set up Google Forms URLs.');
+            }
+        }
+
+        function logout() {
+            currentUser = '';
+            currentEvent = '';
+            document.getElementById('username').value = '';
+            document.getElementById('password').value = '';
+            document.getElementById('errorMessage').classList.add('hidden');
+            showPage('loginPage');
+        }
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            showPage('loginPage');
+        });
+    </script>
+</body>
+</html>
